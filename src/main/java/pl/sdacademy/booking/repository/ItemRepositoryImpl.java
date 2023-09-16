@@ -7,6 +7,7 @@ import pl.sdacademy.booking.util.DatabaseUtil;
 
 import java.util.List;
 
+
 public class ItemRepositoryImpl implements ItemRepository {
 
     private EntityManager entityManager;
@@ -21,5 +22,15 @@ public class ItemRepositoryImpl implements ItemRepository {
                 .createQuery("select item from ItemEntity item "
                         , ItemEntity.class);
         return items.getResultList();
+    }
+
+    @Override
+    public void addItem(ItemEntity item) {
+
+    }
+
+    @Override
+    public Long findItemByName(String name) {
+        return null;
     }
 }
