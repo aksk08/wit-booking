@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface EventRepository {
     List<EventEntity> findAll();
+
+    void addEvent(EventEntity event);
 }

@@ -17,8 +17,13 @@ public class EventRepositoryImpl implements EventRepository{
     @Override
     public List<EventEntity> findAll() {
         TypedQuery<EventEntity> events = entityManager
-                .createQuery("select event from EventEntity event "
+                .createQuery("select * FROM EventEntity"  //równoznaczne zapytanie z select event FROM EventEntity event, gdzie event jest aliasem
                         , EventEntity.class);
         return events.getResultList();
+    }
+
+    @Override
+    public void addEvent(EventEntity event) {
+
     }
 }
