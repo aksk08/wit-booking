@@ -10,8 +10,8 @@ import java.util.List;
 public class EventRepositoryImpl implements EventRepository{
     private EntityManager entityManager;
 
-    public EventRepositoryImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public EventRepositoryImpl() {
+        entityManager = DatabaseUtil.getEntityManager();
     }
 
     @Override
