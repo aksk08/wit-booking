@@ -24,6 +24,8 @@ public class EventRepositoryImpl implements EventRepository{
 
     @Override
     public void addEvent(EventEntity event) {
-
+        entityManager.getTransaction().begin();
+        entityManager.persist(event);
+        entityManager.getTransaction().commit();
     }
 }

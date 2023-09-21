@@ -1,6 +1,8 @@
 package pl.sdacademy.booking.validator;
 
+import org.apache.commons.lang3.StringUtils;
 import pl.sdacademy.booking.model.NewEventDto;
+import pl.sdacademy.booking.repository.EventRepository;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -12,8 +14,15 @@ public class NewEventDtoValidator {
     public static List<String> validate(NewEventDto newEventDto) {
         List<String> listOfMessages = new ArrayList<>();
 
-        if (newEventDto.getItemName() == null) {
-            String message = "Name is null";
+        if (newEventDto == null) {
+            String message = "Event is null";
+            listOfMessages.add(message);
+            return listOfMessages;
+        }
+
+//        if (newEventDto.getItemName() == null || newEventDto.getItemName().isEmpty()) {
+        if (StringUtils.isBlank(newEventDto.getItemName())) {
+            String message = "Name is not set";
             listOfMessages.add(message);
         }
         if (newEventDto.getFromTime() == null) {
@@ -25,7 +34,7 @@ public class NewEventDtoValidator {
             listOfMessages.add(message);
         }
 
-        if (newEventDto.getFromTime() != null && newEventDto.getToTime() != null && newEventDto.getItemName() != null) {
+        if (newEventDto.getFromTime() != null && newEventDto.getToTime() != null) {
             Duration durationOfEvent = Duration.between(newEventDto.getFromTime(), newEventDto.getToTime());
             if (durationOfEvent.isNegative()) {
                 String message = "ToTime is before FromTime";
@@ -46,17 +55,11 @@ public class NewEventDtoValidator {
                 String message = "FromTime is before 8:00";
                 listOfMessages.add(message);
             }
-            if (newEventDto.getToTime().getHour() >= 16 && newEventDto.getToTime().getMinute() >= 0) {
+            if (newEventDto.getToTime().getHour() >= 16) {
                 String message = "ToTime is after 16:00";
                 listOfMessages.add(message);
             }
-            if (newEventDto.getItemName().isEmpty()) {
-                String message = "Name is empty";
-                listOfMessages.add(message);
-            }
-
         }
-        //todo Zad dom - dokończyć walidator, extra zrobić mapper w nowej paczce
 
         return listOfMessages;
     }
