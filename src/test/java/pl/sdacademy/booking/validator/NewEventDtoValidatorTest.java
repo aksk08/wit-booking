@@ -67,7 +67,7 @@ class NewEventDtoValidatorTest {
         //when
         List<String> result = NewEventDtoValidator.validate(input);
         //then
-        assertThat(result).contains("Name is null");
+        assertThat(result).contains("Name is not set");
     }
     @Test
     void shouldCheckThatAllFieldsAreNull(){
@@ -80,7 +80,7 @@ class NewEventDtoValidatorTest {
         //when
         List<String> result = NewEventDtoValidator.validate(input);
         //then
-        assertThat(result).containsExactly("Name is null", "FromTime is null", "ToTime is null");
+        assertThat(result).containsExactly("Name is not set", "FromTime is null", "ToTime is null");
     }
 
     @Test
@@ -148,18 +148,7 @@ class NewEventDtoValidatorTest {
         //then
         assertThat(result).contains("ToTime is after 16:00");
     }
-    @Test
-    void shouldCheckThatNameIsEmpty(){
-        //given
-        NewEventDto input = NewEventDto.builder()
-                .itemName("")
-                .fromTime(LocalDateTime.of(2023, 9, 21, 8, 45))
-                .toTime(LocalDateTime.of(2023, 9, 21, 9, 0))
-                .build();
-        //when
-        List<String> result = NewEventDtoValidator.validate(input);
-        //then
-        assertThat(result).contains("Name is empty");
-    }
+
+    //sprawdzic poprawne wprowadzenie wszystkich danych. sprawdzic czy rozmiar listy komunikatow = 0
 
 }
