@@ -2,6 +2,7 @@ package pl.sdacademy.booking.validator;
 
 import org.junit.jupiter.api.Test;
 import pl.sdacademy.booking.model.NewEventDto;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,14 +15,14 @@ class NewEventDtoValidatorTest {
         NewEventDto input = NewEventDto.builder()
                 .itemName("przykład")
                 .fromTime(null)
-                .toTime(LocalDateTime.of(2023,9, 19, 19, 56))
+                .toTime(LocalDateTime.of(2023, 9, 19, 19, 56))
                 .build();
         //when
         List<String> result = NewEventDtoValidator.validate(input);
         //then
         assertThat(result)
                 .hasSize(1)
-                .containsExactly("FromTime is null");
+                .contains("FromTime is null");
     }
 
     @Test
@@ -29,7 +30,7 @@ class NewEventDtoValidatorTest {
         //given
         NewEventDto input = NewEventDto.builder()
                 .itemName("przykład")
-                .fromTime(LocalDateTime.of(2023,9, 19, 19, 56))
+                .fromTime(LocalDateTime.of(2023, 9, 19, 19, 56))
                 .toTime(null)
                 .build();
         //when
@@ -37,7 +38,7 @@ class NewEventDtoValidatorTest {
         //then
         assertThat(result)
                 .hasSize(1)
-                .containsExactly("ToTime is null");
+                .contains("ToTime is null");
     }
 
     @Test
@@ -55,8 +56,110 @@ class NewEventDtoValidatorTest {
                 .hasSize(2)
                 .containsExactly("FromTime is null", "ToTime is null");
     }
-
+    @Test
+    void shouldCheckThatNameIsNotNull(){
+        //given
+        NewEventDto input = NewEventDto.builder()
+                .itemName(null)
+                .fromTime(LocalDateTime.of(2023, 9, 21, 8, 45))
+                .toTime(LocalDateTime.of(2023, 9, 21, 9, 0))
+                .build();
+        //when
+        List<String> result = NewEventDtoValidator.validate(input);
+        //then
+        assertThat(result).contains("Name is null");
+    }
+    @Test
+    void shouldCheckThatAllFieldsAreNull(){
+        //given
+        NewEventDto input = NewEventDto.builder()
+                .itemName(null)
+                .fromTime(null)
+                .toTime(null)
+                .build();
+        //when
+        List<String> result = NewEventDtoValidator.validate(input);
+        //then
+        assertThat(result).containsExactly("Name is null", "FromTime is null", "ToTime is null");
+    }
 
     @Test
-    void shouldCheckThatNameIsEmptyFromTimeToTimeIsNull() {}
+    void shouldCheckIfToTimeisAfterFromTime() {
+        //given
+        NewEventDto input = NewEventDto.builder()
+                .itemName("test")
+                .fromTime(LocalDateTime.of(2023, 9, 21, 8, 45))
+                .toTime(LocalDateTime.of(2023, 9, 21, 8, 40))
+                .build();
+        //when
+        List<String> result = NewEventDtoValidator.validate(input);
+        //then
+        assertThat(result).contains("ToTime is before FromTime");
+    }
+    @Test
+    void shouldCheckThatSessionIsTooLong(){
+        //given
+        NewEventDto input = NewEventDto.builder()
+                .itemName("test")
+                .fromTime(LocalDateTime.of(2023, 9, 21, 8, 45))
+                .toTime(LocalDateTime.of(2023, 9, 21, 9, 45))
+                .build();
+        //when
+        List<String> result = NewEventDtoValidator.validate(input);
+        //then
+        assertThat(result).contains("Session is too long");
+    }
+//    @Test
+//    void shouldCheckThatSessionStartsAfterTimeNow(){
+//        //given
+//        LocalDateTime timeNow = LocalDateTime.of(2023, 9, 21, 8, 5);
+//        NewEventDto input = NewEventDto.builder()
+//                .itemName("test")
+//                .fromTime(LocalDateTime.of(2023, 9, 21, 8, 30))
+//                .toTime(LocalDateTime.of(2023, 9, 21, 9, 0)).build();
+//        //when
+//        List<String> result = NewEventDtoValidator.validate(input);
+//        //then
+//        assertThat(result).contains("FromTime is before now");
+//    }
+    @Test
+    void shouldCheckThatSessionStartsBeforeWorkingHours(){
+        //given
+        NewEventDto input = NewEventDto.builder()
+                .itemName("test")
+                .fromTime(LocalDateTime.of(2023, 9, 21, 7, 45))
+                .toTime(LocalDateTime.of(2023, 9, 21, 8, 0))
+                .build();
+        //when
+        List<String> result = NewEventDtoValidator.validate(input);
+        //then
+        assertThat(result).contains("FromTime is before 8:00");
+    }
+    @Test
+    void shouldCheckThatSessionFinishesAfterWorkingHours(){
+        //given
+        NewEventDto input = NewEventDto.builder()
+                .itemName("test")
+                .fromTime(LocalDateTime.of(2023, 9, 21, 15, 45))
+                .toTime(LocalDateTime.of(2023, 9, 21, 16, 5))
+                .build();
+        //when
+        List<String> result = NewEventDtoValidator.validate(input);
+        //then
+        assertThat(result).contains("ToTime is after 16:00");
+    }
+    @Test
+    void shouldCheckThatNameIsEmpty(){
+        //given
+        NewEventDto input = NewEventDto.builder()
+                .itemName("")
+                .fromTime(LocalDateTime.of(2023, 9, 21, 8, 45))
+                .toTime(LocalDateTime.of(2023, 9, 21, 9, 0))
+                .build();
+        //when
+        List<String> result = NewEventDtoValidator.validate(input);
+        //then
+        assertThat(result).contains("Name is empty");
+    }
+
 }

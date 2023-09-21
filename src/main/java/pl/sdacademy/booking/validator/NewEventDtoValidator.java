@@ -12,6 +12,10 @@ public class NewEventDtoValidator {
     public static List<String> validate(NewEventDto newEventDto) {
         List<String> listOfMessages = new ArrayList<>();
 
+        if (newEventDto.getItemName() == null) {
+            String message = "Name is null";
+            listOfMessages.add(message);
+        }
         if (newEventDto.getFromTime() == null) {
             String message = "FromTime is null";
             listOfMessages.add(message);
@@ -21,38 +25,33 @@ public class NewEventDtoValidator {
             listOfMessages.add(message);
         }
 
-        if (newEventDto.getFromTime() != null && newEventDto.getToTime() != null) {
+        if (newEventDto.getFromTime() != null && newEventDto.getToTime() != null && newEventDto.getItemName() != null) {
             Duration durationOfEvent = Duration.between(newEventDto.getFromTime(), newEventDto.getToTime());
             if (durationOfEvent.isNegative()) {
                 String message = "ToTime is before FromTime";
                 listOfMessages.add(message);
             }
-            if (durationOfEvent.toMinutes() > 30) {
-                String message = "Zabieg zbyt długi";
+            if (durationOfEvent.toMinutes() >= 30) {
+                String message = "Session is too long";
                 listOfMessages.add(message);
             }
             //czy data jest w przeszlosci //now
             LocalDateTime timeNow = LocalDateTime.now();
             if (newEventDto.getFromTime().isBefore(timeNow)) {
-                String message = "Wprowadzony termin rozpoczęcia już minął";
+                String message = "FromTime is before now";
                 listOfMessages.add(message);
             }
             //czy przypada na godziny pracy (8:00-16:00)
             if (newEventDto.getFromTime().getHour() < 8) {
-                String message = "Wprowadzony termin rozpoczęcia sesji znajduje się przed otwarciem salonu";
+                String message = "FromTime is before 8:00";
                 listOfMessages.add(message);
             }
-            if (newEventDto.getToTime().getHour() > 16) {
-                String message = "Wprowadzony termin zakończenia sesji znajduje się po zamknięciu salonu";
-                listOfMessages.add(message);
-            }
-            //czy itemName nie jest nullem lub empty
-            if (newEventDto.getItemName() == null) {
-                String message = "Wprowadzona nazwa jest nullem";
+            if (newEventDto.getToTime().getHour() >= 16 && newEventDto.getToTime().getMinute() >= 0) {
+                String message = "ToTime is after 16:00";
                 listOfMessages.add(message);
             }
             if (newEventDto.getItemName().isEmpty()) {
-                String message = "Wprowadzona nazwa jest pusta";
+                String message = "Name is empty";
                 listOfMessages.add(message);
             }
 
