@@ -64,8 +64,4 @@ public class EventService {
         eventRepository.addEvent(eventEntity);
         return "Sesja została zapisana";
     }
-
-//    public String addItem(NewEventDto newEvent){
-//        Long eventByName = eventRepository
-//    }
 }

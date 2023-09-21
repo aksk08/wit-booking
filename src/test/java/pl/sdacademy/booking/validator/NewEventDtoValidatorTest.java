@@ -109,7 +109,7 @@ class NewEventDtoValidatorTest {
         //then
         assertThat(result).contains("Session is too long");
     }
-//    @Test
+//    @Test    //skorzystać z klasy Clock
 //    void shouldCheckThatSessionStartsAfterTimeNow(){
 //        //given
 //        LocalDateTime timeNow = LocalDateTime.of(2023, 9, 21, 8, 5);
