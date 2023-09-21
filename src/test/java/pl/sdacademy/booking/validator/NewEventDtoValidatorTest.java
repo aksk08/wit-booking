@@ -55,4 +55,8 @@ class NewEventDtoValidatorTest {
                 .hasSize(2)
                 .containsExactly("FromTime is null", "ToTime is null");
     }
+
+
+    @Test
+    void shouldCheckThatNameIsEmptyFromTimeToTimeIsNull() {}
 }
