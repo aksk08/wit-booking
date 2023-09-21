@@ -33,7 +33,7 @@ public class NewEventDtoValidator {
                 result.add("Too long event");
             }
             //date in the future
-            if (newEventDto.getFromTime().isAfter(LocalDateTime.now())) {
+            if (newEventDto.getFromTime().isBefore(LocalDateTime.now())) {
                 result.add("Beginning in the past");
             }
             //hours from 8 to 16
