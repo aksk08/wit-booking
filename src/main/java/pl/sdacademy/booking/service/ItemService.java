@@ -28,16 +28,7 @@ public class ItemService {
 
         List<ItemEntity> itemEntities = itemRepository.findItems();
         for (ItemEntity entity : itemEntities) {
-            Set<String> attributes = mapAttributes(entity.getAttributes());  //można przerzucić do mappera, następnie w mapperze przekazywać tylko entity
-            result.add(ItemDtoMapper.map(entity, attributes));  //mapuje dane
-        }
-        return result;
-    }
-
-    private Set<String> mapAttributes(Set<ItemAttributeEntity> itemAttributeEntities) { //przerzucamy do mappera
-        Set<String> result = new HashSet<>();
-        for (ItemAttributeEntity attributeEntity : itemAttributeEntities) {
-            result.add(attributeEntity.getAttributeName());
+            result.add(ItemDtoMapper.map(entity));  //mapuje dane
         }
         return result;
     }

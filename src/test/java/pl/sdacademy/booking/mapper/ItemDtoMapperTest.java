@@ -1,10 +1,12 @@
 package pl.sdacademy.booking.mapper;
 
 import org.junit.jupiter.api.Test;
+import pl.sdacademy.booking.data.ItemAttributeEntity;
 import pl.sdacademy.booking.data.ItemEntity;
 import pl.sdacademy.booking.model.ItemDto;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,7 +19,7 @@ class ItemDtoMapperTest {
         ItemEntity input = new ItemEntity();
         Set<String> attributes = Set.of();
 
-        ItemDto result = ItemDtoMapper.map(input, attributes);
+        ItemDto result = ItemDtoMapper.map(input);
 
 //        assertThat(result).isNotNull()
 //                .hasFieldOrPropertyWithValue("id", 0)
@@ -40,9 +42,19 @@ class ItemDtoMapperTest {
         input.setName("itemName");
         input.setId(100L);
         input.setDescription("itemDesc");
-        Set<String> attributes = Set.of("1","2");
+        //tworzenie atrybutów:
+        ItemAttributeEntity attribute1 = new ItemAttributeEntity();
+        attribute1.setId(1);
+        attribute1.setAttributeName("1");
+        ItemAttributeEntity attribute2 = new ItemAttributeEntity();
+        attribute2.setId(2);
+        attribute2.setAttributeName("2");
 
-        ItemDto result = ItemDtoMapper.map(input, attributes);
+        Set<ItemAttributeEntity> attributes = Set.of(attribute1, attribute2);
+        // dodawanie atrybutów do inputu:
+        input.setAttributes(attributes);
+
+        ItemDto result = ItemDtoMapper.map(input);
 
         assertThat(result).isNotNull()
                 .isEqualTo(ItemDto.builder()
@@ -50,7 +62,7 @@ class ItemDtoMapperTest {
                         .price(BigDecimal.TEN)
                         .description("itemDesc")
                         .name("itemName")
-                        .attributes(Set.of("1","2"))
+                        .attributes(Set.of("1", "2"))
                         .build()
                 );
 
