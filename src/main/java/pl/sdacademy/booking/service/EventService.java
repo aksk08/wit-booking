@@ -59,7 +59,7 @@ public class EventService {
         ItemEntity itemEntity = new ItemEntity();
         itemEntity.setId(itemByName);
 
-        eventEntity.setItem(itemEntity); //przekazujemy primary key
+        eventEntity.setItem(itemEntity); //przekazujemy tylko primary key
         eventEntity.setFrom(newEvent.getFromTime());
         eventEntity.setTo(newEvent.getToTime());
         eventRepository.addEvent(eventEntity);

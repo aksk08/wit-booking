@@ -3,7 +3,10 @@ package pl.sdacademy.booking.validator;
 import org.junit.jupiter.api.Test;
 import pl.sdacademy.booking.model.NewEventDto;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -109,19 +112,22 @@ class NewEventDtoValidatorTest {
         //then
         assertThat(result).contains("Session is too long");
     }
-//    @Test    //skorzystać z klasy Clock
-//    void shouldCheckThatSessionStartsAfterTimeNow(){
-//        //given
-//        LocalDateTime timeNow = LocalDateTime.of(2023, 9, 21, 8, 5);
-//        NewEventDto input = NewEventDto.builder()
-//                .itemName("test")
-//                .fromTime(LocalDateTime.of(2023, 9, 21, 8, 30))
-//                .toTime(LocalDateTime.of(2023, 9, 21, 9, 0)).build();
-//        //when
-//        List<String> result = NewEventDtoValidator.validate(input);
-//        //then
-//        assertThat(result).contains("FromTime is before now");
-//    }
+
+    @Test    //skorzystać z klasy Clock
+    void shouldCheckThatSessionStartsAfterTimeNow(){
+        //given
+        Clock clock = Clock.fixed(Instant.parse("2023-09-21T08:05:00.00Z"), ZoneId.of("Europe/Berlin"));
+        LocalDateTime.now(clock);
+
+        NewEventDto input = NewEventDto.builder()
+                .itemName("test")
+                .fromTime(LocalDateTime.of(2023, 9, 21, 8, 30))
+                .toTime(LocalDateTime.of(2023, 9, 21, 9, 0)).build();
+        //when
+        List<String> result = NewEventDtoValidator.validate(input);
+        //then
+        assertThat(result).contains("FromTime is before now");
+    }
     @Test
     void shouldCheckThatSessionStartsBeforeWorkingHours(){
         //given

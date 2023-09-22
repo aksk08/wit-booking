@@ -4,8 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 import pl.sdacademy.booking.model.NewEventDto;
 import pl.sdacademy.booking.repository.EventRepository;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +47,8 @@ public class NewEventDtoValidator {
                 listOfMessages.add(message);
             }
             //czy data jest w przeszlosci //now
-            LocalDateTime timeNow = LocalDateTime.now();
+            Clock clock = Clock.system(ZoneId.of("Europe/Berlin"));
+            LocalDateTime timeNow = LocalDateTime.now(clock);
             if (newEventDto.getFromTime().isBefore(timeNow)) {
                 String message = "FromTime is before now";
                 listOfMessages.add(message);
