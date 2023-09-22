@@ -5,6 +5,7 @@ import jakarta.persistence.TypedQuery;
 import pl.sdacademy.booking.data.EventEntity;
 import pl.sdacademy.booking.util.DatabaseUtil;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class EventRepositoryImpl implements EventRepository{
@@ -27,5 +28,12 @@ public class EventRepositoryImpl implements EventRepository{
         entityManager.getTransaction().begin();
         entityManager.persist(event);
         entityManager.getTransaction().commit();
+    }
+
+    @Override
+    public void findEventByDate(LocalDateTime date) {
+        TypedQuery<EventEntity> events = entityManager
+                .createQuery("SELECT * FROM EventEntity event where time_from<=:dateParam and time_to>=:dateParam", EventEntity.class);
+        events.setParameter("dateParam", date);
     }
 }
