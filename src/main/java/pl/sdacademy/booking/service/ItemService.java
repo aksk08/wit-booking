@@ -1,15 +1,14 @@
 package pl.sdacademy.booking.service;
 
 import lombok.extern.slf4j.Slf4j;
-import pl.sdacademy.booking.data.ItemAttributeEntity;
 import pl.sdacademy.booking.data.ItemEntity;
+import pl.sdacademy.booking.mapper.ItemDtoMapper;
 import pl.sdacademy.booking.model.ItemDto;
+import pl.sdacademy.booking.model.NewItemDto;
 import pl.sdacademy.booking.repository.ItemRepository;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 public class ItemService {
@@ -26,22 +25,22 @@ public class ItemService {
 
         List<ItemEntity> itemEntities = itemRepository.findItems();
         for (ItemEntity entity : itemEntities) {
-            Set<String> attributes = mapAttributes(entity.getAttributes());
-            result.add(ItemDto.builder()
-                    .name(entity.getName())
-                    .price(entity.getPrice())
-                    .description(entity.getDescription())
-                    .attributes(attributes)
-                    .build());
+            result.add(ItemDtoMapper.map(entity));
         }
         return result;
     }
 
-    private Set<String> mapAttributes(Set<ItemAttributeEntity> itemAttributeEntities) {
-        Set<String> result = new HashSet<>();
-        for (ItemAttributeEntity attributeEntity : itemAttributeEntities) {
-            result.add(attributeEntity.getAttributeName());
+
+    public String addItem(NewItemDto newItem) {
+        Long itemByName = itemRepository.findItemByName(newItem.getName());
+        if (itemByName != null) {
+            return "Element istnieje";
         }
-        return result;
+        ItemEntity itemEntity = new ItemEntity();
+        itemEntity.setName(newItem.getName());
+        itemEntity.setDescription(newItem.getDescription());
+        itemEntity.setPrice(newItem.getPrice());
+        itemRepository.addItem(itemEntity);
+        return "Item zapisany";
     }
 }
