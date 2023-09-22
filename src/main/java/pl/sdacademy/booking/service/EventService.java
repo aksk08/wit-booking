@@ -40,10 +40,11 @@ public class EventService {
     }
 
     public String addEvent(NewEventDto newEvent) {
-//        Long eventsByName = eventRepository.findEventsByDate(newEvent.getFromTime());
-//        if (eventsByName != null) {
-//            return "Sesja już istnieje.";
-//        }
+        Long eventByDate = eventRepository.findEventByDate(newEvent.getFromTime());
+        if (eventByDate != null) {
+            return "Sesja już istnieje.";
+        }
+
         List<String> validate = NewEventDtoValidator.validate(newEvent);
         if (validate.size() != 0) {
             String message = String.join(", ", validate);

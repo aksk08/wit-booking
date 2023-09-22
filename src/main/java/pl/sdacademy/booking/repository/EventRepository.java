@@ -9,5 +9,5 @@ public interface EventRepository {
     List<EventEntity> findAll();
 
     void addEvent(EventEntity event);
-    void findEventByDate (LocalDateTime fromTime);
+    Long findEventByDate (LocalDateTime fromTime);
 }
