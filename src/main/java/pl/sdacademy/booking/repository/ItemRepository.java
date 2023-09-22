@@ -7,4 +7,10 @@ import java.util.List;
 public interface ItemRepository {
 
     List<ItemEntity> findItems();
+
+    void addItem(ItemEntity item);
+
+     Long findItemByName(String name);
+
+
 }
